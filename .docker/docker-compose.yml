@@ -1,0 +1,54 @@
+version: "3.1"
+services:
+    soit-mysql:
+      image: mysql:5.7
+      container_name: soit-mysql
+      working_dir: /www
+      volumes:
+        - ..:/www
+      environment:
+        - MYSQL_ROOT_PASSWORD=1234
+        - MYSQL_DATABASE=soit
+        - MYSQL_USER=soit
+        - MYSQL_PASSWORD=1234
+      restart: always
+      ports:
+        - "13306:3306"
+
+    soit-postgres:
+      image: postgres:9.6-alpine
+      container_name: soit-postgres
+      working_dir: /www
+      volumes:
+        - ..:/www
+      environment:
+        - POSTGRES_USER=root
+        - POSTGRES_PASSWORD=1234
+        - POSTGRES_DB=soit
+      ports:
+        - "15432:5432"
+
+    soit-webserver:
+      image: nginx:alpine
+      container_name: soit-webserver
+      working_dir: /www
+      volumes:
+          - ..:/www
+          - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      ports:
+       - "180:80"
+      hostname: soit
+
+    soit-php:
+      build: php-fpm
+      container_name: soit-php
+      working_dir: /www
+      hostname: soit
+      expose:
+       - "9000"
+       - "9001"
+      environment:
+          PHP_IDE_CONFIG: "serverName=soit-webserver"
+      volumes:
+        - ..:/www
+        - ./php-fpm/php-ini-overrides.ini:/etc/php/7.2/fpm/conf.d/99-overrides.ini
