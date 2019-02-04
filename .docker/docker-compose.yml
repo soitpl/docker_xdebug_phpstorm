@@ -10,7 +10,7 @@ services:
         - MYSQL_ROOT_PASSWORD=1234
         - MYSQL_DATABASE=soit
         - MYSQL_USER=soit
-        - MYSQL_PASSWORD=1234
+        - MYSQL_PASSWORD=secret
       restart: always
       ports:
         - "13306:3306"
@@ -51,4 +51,4 @@ services:
           PHP_IDE_CONFIG: "serverName=soit-webserver"
       volumes:
         - ..:/www
-        - ./php-fpm/php-ini-overrides.ini:/etc/php/7.2/fpm/conf.d/99-overrides.ini
+        - ./php-fpm/php-ini-overrides.ini:/etc/php/7.3/fpm/conf.d/99-overrides.ini
